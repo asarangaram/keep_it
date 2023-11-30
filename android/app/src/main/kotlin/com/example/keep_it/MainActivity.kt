@@ -1,4 +1,4 @@
-package com.example.keep_it
+package com.cloudonlanapps.keep_it
 
 import io.flutter.embedding.android.FlutterActivity
 
