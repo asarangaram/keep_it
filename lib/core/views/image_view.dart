@@ -2,7 +2,7 @@ import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../features/image/provider.dart';
+import '../providers/image_provider.dart';
 
 import 'error_view.dart';
 import 'loading_view.dart';
