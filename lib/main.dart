@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:keep_it/test_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'views/image_view.dart';
 
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Keep it',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const TestPage(title: 'Keep It'),
-    );
-  }
+  const String imagePath = "assets/wallpaperflare.com_wallpaper-2.jpg";
+  runApp(const ProviderScope(
+      child: MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: ImageView(
+      imagePath: imagePath,
+    ),
+  )));
 }
