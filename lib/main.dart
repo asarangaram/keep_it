@@ -20,7 +20,7 @@ class KeepItApp implements AppDescriptor {
   }
 
   @override
-  SharedMediaViewBuilder get sharedMediaViewBuilder => null;
+  IncomingMediaViewBuilder get incomingMediaViewBuilder => null;
 
   @override
   CLTransitionBuilder get transitionBuilder => (
