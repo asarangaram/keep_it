@@ -1,7 +1,6 @@
 import 'package:app_loader/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:keep_it/pages/shared_media.dart';
 
 import 'pages/page_show_image.dart';
 
@@ -17,9 +16,11 @@ class KeepItApp implements AppDescriptor {
     return {
       "home": (context) => const PageShowImage(
           imagePath: "assets/wallpaperflare.com_wallpaper-2.jpg"),
-      "shared": (context) => const PageSharedMedia()
     };
   }
+
+  @override
+  SharedMediaViewBuilder get sharedMediaViewBuilder => null;
 
   @override
   CLTransitionBuilder get transitionBuilder => (
