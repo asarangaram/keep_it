@@ -7,7 +7,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:keep_it/data/db.dart';
-import 'package:keep_it/data/models/media.dart';
+import 'media.dart';
 
 void main() {
   test('Test sqliteModel', () {
