@@ -1,52 +1,58 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:keep_it/data/db.dart';
-import 'media.dart';
+import 'package:keep_it/db/db.dart';
 
 void main() {
-  test('Test sqliteModel', () {
-    // Call the function
-    String result = DBTest.dbTest1();
-
-    // Define the expected value
-    String expected = DBTest.dBResult1;
-
+  test('test database', () {
     // Compare the actual result with the expected value
-    expect(result, expected);
+    expect(DBTest.dbTest1(), true);
   });
 }
 
 class DBTest {
-  static String dBResult1 =
-      "Media(id: 2, path: /my/path/2, ref: null),Media(id: 3, path: /my/path/3, ref: https://my.url)";
-  static String dbTest1() {
-    DBManager dbManager = DBManager();
+  static bool dbTest1() {
+    final DatabaseManager dbManager = DatabaseManager();
+    var db = dbManager.db;
 
-    final DBTable mediaTable = dbManager.insertTable(
-      name: Media.tableName,
-      columns: Media.tableColumns,
-    );
-    List<Media> newMedia = [
-      Media(path: "/my/path/1"),
-      Media(path: "/my/path/2"),
-      Media(path: "/my/path/3", ref: "https://my.url"),
-    ];
+    final List<int> tagIds = [];
+    final List<int> clusterIds = [];
+    final List<int> itemIds = [];
 
-    newMedia.map((e) => mediaTable.upsert(e)).toList();
+    // Insert data
+    for (var i = 0; i < 3; i++) {
+      tagIds.add(
+          Tag(label: 'Tag$i', description: 'Tag$i Description').upsert(db));
+    }
+    for (var i = 0; i < 2; i++) {
+      clusterIds.add(Cluster(description: 'Cluster$i Description').upsert(db));
+    }
 
-    mediaTable.deleteByID(1);
+    for (var i = 0; i < 6; i++) {
+      itemIds.add(Item(
+              path: '/path/to/item$i',
+              ref: i == 5 ? "ref5" : null,
+              clusterId: clusterIds[i & 1])
+          .upsert(db));
+    }
 
-    final dbAll =
-        mediaTable.load().map((e) => Media.fromMap(e).toString()).join(',');
+    Cluster.addTagToCluster(db, tagIds[0], clusterIds[0]);
+    Cluster.addTagToCluster(db, tagIds[1], clusterIds[0]);
+    Cluster.addTagToCluster(db, tagIds[1], clusterIds[1]);
+    Cluster.addTagToCluster(db, tagIds[2], clusterIds[1]);
 
-    dbManager.dispose();
+    // Retrieve data
+    // TODO Write verifialbe logic.
+    final tags = Tag.getAll(db);
 
-    return dbAll;
+    for (var tag in tags) {
+      final clusters = Cluster.getClustersForTag(db, tag.id!);
+      for (var cluster in clusters) {
+        Tag.getTagsForCluster(db, cluster.id!);
+        Item.getItemsForCluster(db, cluster.id!);
+      }
+    }
+
+    dbManager.close();
+
+    return true;
   }
 }
