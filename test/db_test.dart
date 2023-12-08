@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:keep_it/db/db.dart';
+import 'package:keep_it/models/models.dart';
 
 void main() {
   test('test database', () {
@@ -34,20 +35,20 @@ class DBTest {
           .upsert(db));
     }
 
-    Cluster.addTagToCluster(db, tagIds[0], clusterIds[0]);
-    Cluster.addTagToCluster(db, tagIds[1], clusterIds[0]);
-    Cluster.addTagToCluster(db, tagIds[1], clusterIds[1]);
-    Cluster.addTagToCluster(db, tagIds[2], clusterIds[1]);
+    ClusterDB.addTagToCluster(db, tagIds[0], clusterIds[0]);
+    ClusterDB.addTagToCluster(db, tagIds[1], clusterIds[0]);
+    ClusterDB.addTagToCluster(db, tagIds[1], clusterIds[1]);
+    ClusterDB.addTagToCluster(db, tagIds[2], clusterIds[1]);
 
     // Retrieve data
-    // TODO Write verifialbe logic.
-    final tags = Tag.getAll(db);
+
+    final tags = TagDB.getAll(db);
 
     for (var tag in tags) {
-      final clusters = Cluster.getClustersForTag(db, tag.id!);
+      final clusters = ClusterDB.getClustersForTag(db, tag.id!);
       for (var cluster in clusters) {
-        Tag.getTagsForCluster(db, cluster.id!);
-        Item.getItemsForCluster(db, cluster.id!);
+        TagDB.getTagsForCluster(db, cluster.id!);
+        ItemDB.getItemsForCluster(db, cluster.id!);
       }
     }
 

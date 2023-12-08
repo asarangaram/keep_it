@@ -1,27 +1,9 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:sqlite3/sqlite3.dart';
 
-import '../table.dart';
+import '../../../models/models.dart';
 
-class Tag extends DBTable {
-  int? id;
-  String label;
-  String? description;
-  Tag({
-    this.id,
-    required this.label,
-    this.description,
-  });
-
-  factory Tag.fromMap(Map<String, dynamic> map) {
-    return Tag(
-      id: map['id'] != null ? map['id'] as int : null,
-      label: map['label'] as String,
-      description:
-          map['description'] != null ? map['description'] as String : null,
-    );
-  }
-  factory Tag.getById(Database db, int tagId) {
+extension TagDB on Tag {
+  static getById(Database db, int tagId) {
     final map = db.select('SELECT * FROM Tags WHERE id = ?', [tagId]).first;
     return Tag.fromMap(map);
   }
@@ -31,7 +13,6 @@ class Tag extends DBTable {
     return maps.map((e) => Tag.fromMap(e)).toList();
   }
 
-  @override
   int upsert(Database db) {
     if (id != null) {
       db.execute('UPDATE Tags SET label = ?, description = ? WHERE id = ?',
@@ -43,7 +24,6 @@ class Tag extends DBTable {
     return db.lastInsertRowId;
   }
 
-  @override
   void delete(Database db, {int? alternateTagId}) {
     if (id == null) return;
 
@@ -89,32 +69,4 @@ WHERE tag_id = ?
     ''', [itemId]);
     return maps.map((e) => Tag.fromMap(e)).toList();
   }
-
-  Tag copyWith({
-    int? id,
-    String? label,
-    String? description,
-  }) {
-    return Tag(
-      id: id ?? this.id,
-      label: label ?? this.label,
-      description: description ?? this.description,
-    );
-  }
-
-  @override
-  String toString() => 'Tag(id: $id, label: $label, description: $description)';
-
-  @override
-  bool operator ==(covariant Tag other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.id == id &&
-      other.label == label &&
-      other.description == description;
-  }
-
-  @override
-  int get hashCode => id.hashCode ^ label.hashCode ^ description.hashCode;
 }
