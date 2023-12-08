@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'pages/page_show_image.dart';
+import 'pages/views/shared_items_view.dart';
 
 class KeepItApp implements AppDescriptor {
   @override
@@ -20,7 +21,15 @@ class KeepItApp implements AppDescriptor {
   }
 
   @override
-  IncomingMediaViewBuilder get incomingMediaViewBuilder => null;
+  IncomingMediaViewBuilder get incomingMediaViewBuilder =>
+      (BuildContext context, WidgetRef ref,
+          {required Map<String, SupportedMediaType> sharedMedia,
+          required Function() onDiscard}) {
+        return SharedItemsView(
+          sharedMedia: sharedMedia,
+          onDiscard: onDiscard,
+        );
+      };
 
   @override
   CLTransitionBuilder get transitionBuilder => (
