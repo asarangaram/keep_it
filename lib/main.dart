@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:app_loader/app_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'pages/page_show_image.dart';
 import 'pages/views/shared_items_view.dart';
 
@@ -10,7 +13,16 @@ class KeepItApp implements AppDescriptor {
   String get title => "Keep It";
 
   @override
-  CLAppInitializer get appInitializer => (ref) async => true;
+  CLAppInitializer get appInitializer => (ref) async {
+        //TODO: Delete only if saved preference is set to reset
+        final appDir = await getApplicationDocumentsDirectory();
+        final fullPath = path.join(appDir.path, 'keepIt.db');
+        if (File(fullPath).existsSync()) {
+          File(fullPath).delete();
+        }
+
+        return true;
+      };
 
   @override
   Map<String, CLWidgetBuilder> get screenBuilders {
@@ -26,7 +38,7 @@ class KeepItApp implements AppDescriptor {
           {required Map<String, SupportedMediaType> sharedMedia,
           required Function() onDiscard}) {
         return SharedItemsView(
-          sharedMedia: sharedMedia,
+          media: sharedMedia,
           onDiscard: onDiscard,
         );
       };

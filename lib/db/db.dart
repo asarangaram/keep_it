@@ -21,7 +21,7 @@ class DatabaseManager {
     db.execute('''
       CREATE TABLE IF NOT EXISTS Tags (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        label TEXT,
+        label TEXT NOT NULL UNIQUE,
         description TEXT
       )
     ''');
@@ -37,7 +37,7 @@ class DatabaseManager {
     db.execute('''
       CREATE TABLE IF NOT EXISTS Item (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        path TEXT,
+        path TEXT NOT NULL UNIQUE,
         ref TEXT,
         cluster_id INTEGER,
         FOREIGN KEY (cluster_id) REFERENCES Cluster(id)
