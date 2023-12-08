@@ -13,7 +13,7 @@ final dbManagerProvider = FutureProvider<DatabaseManager>((ref) async {
   } else {
     dbManager = DatabaseManager();
   }
-  ref.onDispose(() => dbManager.db.dispose());
+  ref.onDispose(() => dbManager.close());
   return dbManager;
 });
 

@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_loader/app_loader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:keep_it/providers/db_manager.dart';
 
 import '../db/db.dart';
 import '../models/models.dart';
@@ -49,4 +51,20 @@ class DBStoreNotifier extends StateNotifier<DBStore> {
 
 final dbStoreProvider = StateNotifierProvider<DBStoreNotifier, DBStore>((ref) {
   return DBStoreNotifier();
+});
+
+final tagsProvider =
+    FutureProvider.family.autoDispose<List<Tag>, int?>((ref, clusterId) async {
+  final dbManager = await ref.watch(dbManagerProvider.future);
+
+  final subscription =
+      dbManager.registerListener((event) => ref.invalidateSelf());
+  ref.onDispose(() {
+    subscription.cancel();
+  });
+  if (clusterId == null) {
+    return TagDB.getAll(dbManager.db);
+  } else {
+    return TagDB.getTagsForCluster(dbManager.db, clusterId);
+  }
 });

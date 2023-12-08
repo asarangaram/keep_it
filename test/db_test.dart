@@ -13,6 +13,7 @@ class DBTest {
   static bool dbTest1() {
     final DatabaseManager dbManager = DatabaseManager();
     var db = dbManager.db;
+    dbManager.registerListener((event) => print("Tags tablle changed"));
 
     final List<int> tagIds = [];
     final List<int> clusterIds = [];
@@ -44,6 +45,8 @@ class DBTest {
 
     final tags = TagDB.getAll(db);
 
+    tags[0].label = "New Label";
+    tags[0].upsert(db);
     for (var tag in tags) {
       final clusters = ClusterDB.getClustersForTag(db, tag.id!);
       for (var cluster in clusters) {
@@ -51,7 +54,7 @@ class DBTest {
         ItemDB.getItemsForCluster(db, cluster.id!);
       }
     }
-
+    tags[2].delete(db);
     dbManager.close();
 
     return true;
