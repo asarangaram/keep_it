@@ -18,32 +18,23 @@ class _TagsViewState extends State<TagsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: DecoratedBox(
-        decoration: BoxDecoration(border: Border.all(color: Colors.yellow)),
-        child: SafeArea(
-          child: DecoratedBox(
-            decoration: BoxDecoration(border: Border.all(color: Colors.red)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: AspectRatio(
-                    aspectRatio: Constants.aspectRatio,
-                    child: const MyPageView(),
-                  ),
-                ),
-                const DecoratedBox(
-                  decoration: BoxDecoration(),
-                  child: Text(
-                    "Some text",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                const Spacer()
-              ],
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Text(
+              "Some text",
+              style: TextStyle(color: Colors.white),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: AspectRatio(
+                aspectRatio: Constants.aspectRatio,
+                child: const MyPageView(),
+              ),
+            ),
+            const Spacer()
+          ],
         ),
       ),
     );
@@ -57,18 +48,7 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox.expand(
-      child: DecoratedBox(
-        // padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            border: Border(
-                top: BorderSide(color: Color.fromARGB(255, 0xFF, 0xFF, 0xF0)),
-                bottom:
-                    BorderSide(color: Color.fromARGB(255, 0xFF, 0xFF, 0xF0)),
-                left: BorderSide(color: Color.fromARGB(255, 0xFF, 0xFF, 0xF0)),
-                right:
-                    BorderSide(color: Color.fromARGB(255, 0xFF, 0xFF, 0xF0)))),
-        child: MyGrid(),
-      ),
+      child: MyGrid(),
     );
   }
 }
@@ -125,56 +105,58 @@ class MyGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      for (var c = 0; c < 4; c++)
-        Row(
-          children: <Widget>[
-            for (var r = 0; r < 4; r++)
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(Constants.paddingDefault),
-                  child: AspectRatio(
-                    aspectRatio: Constants.aspectRatio,
-                    child: SizedBox.expand(
-                      child: Column(
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 1.0,
-                            child: Container(
-                              margin: const EdgeInsets.all(2.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(width: 3.0, color: Colors.green),
-                              ),
-                            ),
-                          ),
-                          Flexible(
-                            child: SizedBox.expand(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  r == 1 ? "tiny" : "12345678901234567890 ",
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context)
-                                      .primaryTextTheme
-                                      .labelLarge!
-                                      .copyWith(
-                                          color: Colors.white,
-                                          fontFamily: 'SF Pro Text'),
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          for (var c = 0; c < 4; c++)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                for (var r = 0; r < 4; r++)
+                  Expanded(
+                    child: AspectRatio(
+                      aspectRatio: Constants.aspectRatio,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox.expand(
+                          child: Column(
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 1.0,
+                                child: Container(
+                                  margin: const EdgeInsets.all(2.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 3.0, color: Colors.green),
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        ],
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    r == 1 ? "tiny" : "12345678901234567890 ",
+                                    maxLines: 2,
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Theme.of(context)
+                                        .primaryTextTheme
+                                        .labelLarge!
+                                        .copyWith(
+                                            color: Colors.white,
+                                            fontFamily: 'SF Pro Text'),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-          ],
-        )
-    ]);
+              ],
+            )
+        ]);
   }
 }
