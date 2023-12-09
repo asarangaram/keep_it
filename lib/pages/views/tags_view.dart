@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
@@ -114,49 +116,76 @@ class MyGrid extends StatelessWidget {
               children: <Widget>[
                 for (var r = 0; r < 4; r++)
                   Expanded(
-                    child: AspectRatio(
-                      aspectRatio: Constants.aspectRatio,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox.expand(
-                          child: Column(
-                            children: [
-                              AspectRatio(
-                                aspectRatio: 1.0,
-                                child: Container(
-                                  margin: const EdgeInsets.all(2.0),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                        width: 3.0, color: Colors.green),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    r == 1 ? "tiny" : "12345678901234567890 ",
-                                    maxLines: 2,
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: Theme.of(context)
-                                        .primaryTextTheme
-                                        .labelLarge!
-                                        .copyWith(
-                                            color: Colors.white,
-                                            fontFamily: 'SF Pro Text'),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: CLRoundIconLabeled(
+                        label: r == 1 ? "tiny" : "12345678901234567890 "),
                   ),
               ],
             )
         ]);
+  }
+}
+
+class CLRoundIconLabeled extends StatelessWidget {
+  const CLRoundIconLabeled({
+    super.key,
+    required this.label,
+    this.child,
+    this.horizontalSpacing = 8.0,
+    this.verticalSpacing = 16.0,
+  });
+
+  final String label;
+  final Widget? child;
+  final double horizontalSpacing;
+  final double verticalSpacing;
+
+  @override
+  Widget build(BuildContext context) {
+    return AspectRatio(
+      aspectRatio: Constants.aspectRatio,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: horizontalSpacing, vertical: verticalSpacing),
+        child: SizedBox.expand(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: AspectRatio(
+                  aspectRatio: 1.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: child ??
+                        child ??
+                        DecoratedBox(
+                            decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.primaries[
+                              Random().nextInt(Colors.primaries.length)],
+                        )),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    label,
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .primaryTextTheme
+                        .labelLarge!
+                        .copyWith(
+                            color: Colors.white, fontFamily: 'SF Pro Text'),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
