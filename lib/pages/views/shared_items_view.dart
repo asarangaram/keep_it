@@ -65,12 +65,9 @@ class SharedItemsViewInternal extends ConsumerWidget {
               ],
               CLStandardButton(
                   label: "Save",
-                  onPressed: () async {
-                    await ref.read(dbStoreProvider.notifier).onSaveCluster(
-                          dbManager: dbManager,
-                          media: media,
-                        );
-                    onDiscard();
+                  onPressed: () {
+                    // TODO: Implement
+                    //onDiscard();
                   })
             ]),
           )),

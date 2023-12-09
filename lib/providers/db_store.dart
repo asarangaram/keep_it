@@ -1,69 +1,69 @@
-import 'dart:io';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:async';
 
-import 'package:app_loader/app_loader.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:keep_it/providers/db_manager.dart';
+import 'package:keep_it/db/db.dart';
 
-import '../db/db.dart';
 import '../models/models.dart';
+import 'db_manager.dart';
 
-class DBStore {
-  final bool isDirty;
-  DBStore({required this.isDirty});
-}
+class TagNotifier extends StateNotifier<AsyncValue<List<Tag>>> {
+  DatabaseManager? databaseManager;
+  int? clusterId;
 
-class DBStoreNotifier extends StateNotifier<DBStore> {
-  DBStoreNotifier() : super(DBStore(isDirty: false));
+  bool isLoading = false;
+  TagNotifier({
+    this.databaseManager,
+    this.clusterId,
+  }) : super(const AsyncValue.loading()) {
+    loadTags();
+  }
+  // Some race condition might occuur if many tags are updated
+  /// How to avoid more frequent update if many triggers occur one after other.
+  loadTags() async {
+    if (databaseManager == null) return;
+    final List<Tag> tags;
 
-  onSaveCluster({
-    required DatabaseManager dbManager,
-    required Map<String, SupportedMediaType> media,
-  }) async {
-    final db = dbManager.db;
-    // Create new Cluster
-
-    final clusterId = Cluster(description: "No Description").upsert(db);
-
-    for (MapEntry<String, SupportedMediaType> m in media.entries) {
-      switch (m.value) {
-        case SupportedMediaType.text:
-        case SupportedMediaType.url:
-        default:
-          final path = m.key;
-          final String newFile;
-          final String? ref;
-          if (!await File(path).exists()) {}
-          newFile = await FileHandler.move(path, toDir: 'keep_it');
-          if (await File("$path.url").exists()) {
-            ref = await File("$path.url").readAsString();
-            await File("$path.url").delete();
-          } else {
-            ref = null;
-          }
-          await File(path).delete();
-
-          Item(path: newFile, ref: ref, clusterId: clusterId).upsert(db);
-      }
+    if (clusterId == null) {
+      tags = TagDB.getAll(databaseManager!.db);
+    } else {
+      tags = TagDB.getTagsForCluster(databaseManager!.db, clusterId!);
     }
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      return tags;
+    });
+  }
+
+  void upsert(List<Tag> tags) {
+    if (databaseManager == null) {
+      throw Exception("DB Manager is not ready");
+    }
+    for (var tag in tags) {
+      tag.upsert(databaseManager!.db);
+    }
+    loadTags();
+  }
+
+  void delete(List<Tag> tags) {
+    if (databaseManager == null) {
+      throw Exception("DB Manager is not ready");
+    }
+    for (var tag in tags) {
+      tag.delete(databaseManager!.db);
+    }
+    loadTags();
   }
 }
-
-final dbStoreProvider = StateNotifierProvider<DBStoreNotifier, DBStore>((ref) {
-  return DBStoreNotifier();
-});
 
 final tagsProvider =
-    FutureProvider.family.autoDispose<List<Tag>, int?>((ref, clusterId) async {
-  final dbManager = await ref.watch(dbManagerProvider.future);
-
-  final subscription =
-      dbManager.registerListener((event) => ref.invalidateSelf());
-  ref.onDispose(() {
-    subscription.cancel();
-  });
-  if (clusterId == null) {
-    return TagDB.getAll(dbManager.db);
-  } else {
-    return TagDB.getTagsForCluster(dbManager.db, clusterId);
-  }
+    StateNotifierProvider.family<TagNotifier, AsyncValue<List<Tag>>, int?>(
+        (ref, clusterId) {
+  final dbManagerAsync = ref.watch(dbManagerProvider);
+  return dbManagerAsync.when(
+    data: (DatabaseManager dbManager) =>
+        TagNotifier(databaseManager: dbManager, clusterId: clusterId),
+    error: (_, __) => TagNotifier(),
+    loading: () => TagNotifier(),
+  );
 });

@@ -1,22 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:async';
-
 import 'package:sqlite3/sqlite3.dart';
 
 export 'src/extensions/cluster.dart';
 export 'src/extensions/item.dart';
 export 'src/extensions/tags.dart';
 
-class TagsUpdatedEvent {
-  String msg;
-  TagsUpdatedEvent({
-    required this.msg,
-  });
-}
-
 class DatabaseManager {
-  final _controller = StreamController<TagsUpdatedEvent>.broadcast();
-  Stream<void> get onDataChanged => _controller.stream;
   late Database db;
 
   DatabaseManager({String? path, Function()? sqlite3LibOverrider}) {
@@ -65,41 +53,11 @@ class DatabaseManager {
         PRIMARY KEY (tag_id, cluster_id)
       )
     ''');
-    db.createFunction(
-      functionName: 'tags_updated',
-      function: onTagsUpdated,
-      argumentCount: const AllowedArgumentCount(2),
-      deterministic: true,
-      directOnly: false,
-    );
-    db.execute('CREATE TRIGGER IF NOT EXISTS tag_inserted '
-        'AFTER INSERT ON Tags BEGIN '
-        'SELECT tags_updated("inserted", NEW.id); '
-        'END');
-    db.execute('CREATE TRIGGER IF NOT EXISTS tag_updated '
-        'AFTER UPDATE ON Tags BEGIN '
-        'SELECT tags_updated("updated", NEW.id); '
-        'END');
-    db.execute('CREATE TRIGGER IF NOT EXISTS tag_deleted '
-        'AFTER DELETE ON Tags BEGIN '
-        'SELECT tags_updated("deleted", OLD.id); '
-        'END');
-  }
-
-  void onTagsUpdated(List<Object?> arguments) {
-    _controller.add(TagsUpdatedEvent(msg: arguments[0] as String));
-    return;
   }
 
   // Close the database connection
   void close() {
-    _controller.close();
     db.dispose();
-  }
-
-  StreamSubscription<TagsUpdatedEvent> registerListener(
-      Function(TagsUpdatedEvent event) listener) {
-    return _controller.stream.listen(listener);
   }
 }
 /*
