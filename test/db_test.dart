@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:keep_it/db/db.dart';
 import 'package:keep_it/models/models.dart';
@@ -13,7 +14,7 @@ class DBTest {
   static bool dbTest1() {
     final DatabaseManager dbManager = DatabaseManager();
     var db = dbManager.db;
-    dbManager.registerListener((event) => print("Tags tablle changed"));
+    dbManager.registerListener((event) => debugPrint("Tags tablle changed"));
 
     final List<int> tagIds = [];
     final List<int> clusterIds = [];

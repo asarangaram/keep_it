@@ -1,9 +1,7 @@
-import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
 import '../../models/models.dart';
-import 'tags_list.dart';
 
 class TagsView extends StatefulWidget {
   const TagsView({
@@ -18,8 +16,6 @@ class TagsView extends StatefulWidget {
 class _TagsViewState extends State<TagsView> {
   @override
   Widget build(BuildContext context) {
-    double iconSize = 80;
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: DecoratedBox(
@@ -81,10 +77,10 @@ class MyPageView extends StatefulWidget {
   const MyPageView({super.key});
 
   @override
-  _MyPageViewState createState() => _MyPageViewState();
+  MyPageViewState createState() => MyPageViewState();
 }
 
-class _MyPageViewState extends State<MyPageView> {
+class MyPageViewState extends State<MyPageView> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 

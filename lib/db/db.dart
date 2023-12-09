@@ -91,11 +91,6 @@ class DatabaseManager {
     return;
   }
 
-  // Define your custom function
-  void printInsertedValue(int value) {
-    print("Inserted value: $value");
-  }
-
   // Close the database connection
   void close() {
     _controller.close();
