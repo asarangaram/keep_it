@@ -14,7 +14,6 @@ class DBTest {
   static bool dbTest1() {
     final DatabaseManager dbManager = DatabaseManager();
     var db = dbManager.db;
-    dbManager.registerListener((event) => debugPrint("Tags tablle changed"));
 
     final List<int> tagIds = [];
     final List<int> clusterIds = [];
