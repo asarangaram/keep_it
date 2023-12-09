@@ -1,6 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:keep_it/db/db.dart';
-import 'package:keep_it/models/models.dart';
+
+import 'package:keep_it/db/models/item.dart';
+import 'package:keep_it/models/cluster.dart';
+import 'package:keep_it/models/collection.dart';
 
 void main() {
   test('test database', () {
@@ -14,14 +17,15 @@ class DBTest {
     final DatabaseManager dbManager = DatabaseManager();
     var db = dbManager.db;
 
-    final List<int> tagIds = [];
+    final List<int> collectionIds = [];
     final List<int> clusterIds = [];
     final List<int> itemIds = [];
 
     // Insert data
     for (var i = 0; i < 3; i++) {
-      tagIds.add(
-          Tag(label: 'Tag$i', description: 'Tag$i Description').upsert(db));
+      collectionIds.add(Collection(
+              label: 'Collection$i', description: 'Collection$i Description')
+          .upsert(db));
     }
     for (var i = 0; i < 2; i++) {
       clusterIds.add(Cluster(description: 'Cluster$i Description').upsert(db));
@@ -35,25 +39,25 @@ class DBTest {
           .upsert(db));
     }
 
-    ClusterDB.addTagToCluster(db, tagIds[0], clusterIds[0]);
-    ClusterDB.addTagToCluster(db, tagIds[1], clusterIds[0]);
-    ClusterDB.addTagToCluster(db, tagIds[1], clusterIds[1]);
-    ClusterDB.addTagToCluster(db, tagIds[2], clusterIds[1]);
+    ClusterDB.addCollectionToCluster(db, collectionIds[0], clusterIds[0]);
+    ClusterDB.addCollectionToCluster(db, collectionIds[1], clusterIds[0]);
+    ClusterDB.addCollectionToCluster(db, collectionIds[1], clusterIds[1]);
+    ClusterDB.addCollectionToCluster(db, collectionIds[2], clusterIds[1]);
 
     // Retrieve data
 
-    final tags = TagDB.getAll(db);
+    final collections = CollectionDB.getAll(db);
 
-    tags[0].label = "New Label";
-    tags[0].upsert(db);
-    for (var tag in tags) {
-      final clusters = ClusterDB.getClustersForTag(db, tag.id!);
+    collections[0].label = "New Label";
+    collections[0].upsert(db);
+    for (var collection in collections) {
+      final clusters = ClusterDB.getClustersForCollection(db, collection.id!);
       for (var cluster in clusters) {
-        TagDB.getTagsForCluster(db, cluster.id!);
+        CollectionDB.getCollectionsForCluster(db, cluster.id!);
         ItemDB.getItemsForCluster(db, cluster.id!);
       }
     }
-    tags[2].delete(db);
+    collections[2].delete(db);
     dbManager.close();
 
     return true;

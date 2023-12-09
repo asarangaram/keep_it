@@ -2,7 +2,7 @@ import 'package:sqlite3/sqlite3.dart';
 
 export 'src/extensions/cluster.dart';
 export 'src/extensions/item.dart';
-export 'src/extensions/tags.dart';
+export 'src/extensions/collections.dart';
 
 class DatabaseManager {
   late Database db;
@@ -19,7 +19,7 @@ class DatabaseManager {
 
   void _createTables() {
     db.execute('''
-      CREATE TABLE IF NOT EXISTS Tags (
+      CREATE TABLE IF NOT EXISTS Collections (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         label TEXT NOT NULL UNIQUE,
         description TEXT
@@ -45,12 +45,12 @@ class DatabaseManager {
     ''');
 
     db.execute('''
-      CREATE TABLE IF NOT EXISTS TagCluster (
-        tag_id INTEGER,
+      CREATE TABLE IF NOT EXISTS CollectionCluster (
+        collection_id INTEGER,
         cluster_id INTEGER,
-        FOREIGN KEY (tag_id) REFERENCES Tags(id),
+        FOREIGN KEY (collection_id) REFERENCES Collections(id),
         FOREIGN KEY (cluster_id) REFERENCES Cluster(id),
-        PRIMARY KEY (tag_id, cluster_id)
+        PRIMARY KEY (collection_id, cluster_id)
       )
     ''');
   }

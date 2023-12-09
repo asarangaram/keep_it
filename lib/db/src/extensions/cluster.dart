@@ -1,6 +1,6 @@
 import 'package:sqlite3/sqlite3.dart';
 
-import '../../../models/models.dart';
+import '../../../models/cluster.dart';
 
 extension ClusterDB on Cluster {
   static getById(Database db, int clusterId) {
@@ -31,21 +31,23 @@ extension ClusterDB on Cluster {
   void delete(Database db) {
     if (id == null) return;
     db.execute('DELETE FROM Item WHERE cluster_id = ?', [id!]);
-    db.execute('DELETE FROM TagCluster WHERE cluster_id = ?', [id!]);
+    db.execute('DELETE FROM CollectionCluster WHERE cluster_id = ?', [id!]);
     db.execute('DELETE FROM Cluster WHERE id = ?', [id!]);
   }
 
-  static List<Cluster> getClustersForTag(Database db, int tagId) {
+  static List<Cluster> getClustersForCollection(Database db, int collectionId) {
     List<Map<String, dynamic>> maps = db.select('''
       SELECT Cluster.* FROM Cluster
-      JOIN TagCluster ON Cluster.id = TagCluster.cluster_id
-      WHERE TagCluster.tag_id = ?
-    ''', [tagId]);
+      JOIN CollectionCluster ON Cluster.id = CollectionCluster.cluster_id
+      WHERE CollectionCluster.collection_id = ?
+    ''', [collectionId]);
     return maps.map((e) => Cluster.fromMap(e)).toList();
   }
 
-  static void addTagToCluster(Database db, int tagId, int clusterId) {
-    db.execute('INSERT INTO TagCluster (tag_id, cluster_id) VALUES (?, ?)',
-        [tagId, clusterId]);
+  static void addCollectionToCluster(
+      Database db, int collectionId, int clusterId) {
+    db.execute(
+        'INSERT INTO CollectionCluster (collection_id, cluster_id) VALUES (?, ?)',
+        [collectionId, clusterId]);
   }
 }

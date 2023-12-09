@@ -1,66 +1,86 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keep_it/db/db.dart';
 
-import '../models/models.dart';
+import '../models/collection.dart';
+import '../models/collections.dart';
 import 'db_manager.dart';
 
-class TagNotifier extends StateNotifier<AsyncValue<List<Tag>>> {
+class CollectionNotifier extends StateNotifier<AsyncValue<Collections>> {
   DatabaseManager? databaseManager;
   int? clusterId;
 
   bool isLoading = false;
-  TagNotifier({
+  CollectionNotifier({
     this.databaseManager,
     this.clusterId,
   }) : super(const AsyncValue.loading()) {
-    loadTags();
+    loadCollections();
   }
-  // Some race condition might occuur if many tags are updated
+  // Some race condition might occuur if many collections are updated
   /// How to avoid more frequent update if many triggers occur one after other.
-  loadTags() async {
+  loadCollections() async {
     if (databaseManager == null) return;
-    final List<Tag> tags;
+    final List<Collection> collections;
 
     if (clusterId == null) {
-      tags = TagDB.getAll(databaseManager!.db);
+      collections = CollectionDB.getAll(databaseManager!.db);
     } else {
-      tags = TagDB.getTagsForCluster(databaseManager!.db, clusterId!);
+      collections = CollectionDB.getCollectionsForCluster(
+          databaseManager!.db, clusterId!);
     }
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() async {
-      return tags;
+      return Collections(collections);
     });
   }
 
-  void upsert(List<Tag> tags) {
+  void upsertCollection(Collection collection) {
     if (databaseManager == null) {
       throw Exception("DB Manager is not ready");
     }
-    for (var tag in tags) {
-      tag.upsert(databaseManager!.db);
-    }
-    loadTags();
+
+    collection.upsert(databaseManager!.db);
+
+    loadCollections();
   }
 
-  void delete(List<Tag> tags) {
+  void upsertCollections(List<Collection> collections) {
     if (databaseManager == null) {
       throw Exception("DB Manager is not ready");
     }
-    for (var tag in tags) {
-      tag.delete(databaseManager!.db);
+    for (var collection in collections) {
+      collection.upsert(databaseManager!.db);
     }
-    loadTags();
+    loadCollections();
+  }
+
+  void deleteCollection(Collection collection) {
+    if (databaseManager == null) {
+      throw Exception("DB Manager is not ready");
+    }
+
+    collection.delete(databaseManager!.db);
+    loadCollections();
+  }
+
+  void deleteCollections(List<Collection> collections) {
+    if (databaseManager == null) {
+      throw Exception("DB Manager is not ready");
+    }
+    for (var collection in collections) {
+      collection.delete(databaseManager!.db);
+    }
+    loadCollections();
   }
 }
 
-final tagsProvider =
-    StateNotifierProvider.family<TagNotifier, AsyncValue<List<Tag>>, int?>(
-        (ref, clusterId) {
+final collectionsProvider = StateNotifierProvider.family<CollectionNotifier,
+    AsyncValue<Collections>, int?>((ref, clusterId) {
   final dbManagerAsync = ref.watch(dbManagerProvider);
   return dbManagerAsync.when(
     data: (DatabaseManager dbManager) =>
-        TagNotifier(databaseManager: dbManager, clusterId: clusterId),
-    error: (_, __) => TagNotifier(),
-    loading: () => TagNotifier(),
+        CollectionNotifier(databaseManager: dbManager, clusterId: clusterId),
+    error: (_, __) => CollectionNotifier(),
+    loading: () => CollectionNotifier(),
   );
 });

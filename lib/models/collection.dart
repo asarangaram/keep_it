@@ -1,17 +1,17 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
-class Tag  {
+class Collection {
   int? id;
   String label;
   String? description;
-  Tag({
+  Collection({
     this.id,
     required this.label,
     this.description,
   });
 
-  factory Tag.fromMap(Map<String, dynamic> map) {
-    return Tag(
+  factory Collection.fromMap(Map<String, dynamic> map) {
+    return Collection(
       id: map['id'] != null ? map['id'] as int : null,
       label: map['label'] as String,
       description:
@@ -19,12 +19,12 @@ class Tag  {
     );
   }
 
-  Tag copyWith({
+  Collection copyWith({
     int? id,
     String? label,
     String? description,
   }) {
-    return Tag(
+    return Collection(
       id: id ?? this.id,
       label: label ?? this.label,
       description: description ?? this.description,
@@ -32,10 +32,11 @@ class Tag  {
   }
 
   @override
-  String toString() => 'Tag(id: $id, label: $label, description: $description)';
+  String toString() =>
+      'Collection(id: $id, label: $label, description: $description)';
 
   @override
-  bool operator ==(covariant Tag other) {
+  bool operator ==(covariant Collection other) {
     if (identical(this, other)) return true;
 
     return other.id == id &&
