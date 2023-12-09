@@ -4,13 +4,13 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+a descriptive and organized approach.
 
-A few resources to get you started if this is your first Flutter project:
+Single purpose, you collect, and organize to search and use later.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This app don;t read your gallery and dump all the photos into your collection.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+No data goes out of your device, hence its complete private.
+
+## TODO 
+Have a password system for tags. Use a system password to remove password.
