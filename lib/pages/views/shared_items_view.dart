@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../db/db.dart';
 import '../../providers/db_manager.dart';
-import '../../providers/db_store.dart';
+
 import 'error_view.dart';
 import 'loading_view.dart';
 
