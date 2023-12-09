@@ -27,6 +27,7 @@ dependencies:
   path_provider: ^2.1.1
   path: ^1.8.3
   collection: ^1.17.2
+  palette_generator: ^0.3.3+3
   
 dev_dependencies:
   flutter_test:
@@ -39,3 +40,8 @@ flutter:
     - assets/nature-sky-water-sea-natural-landscape-ocean-1520813-pxhere.com.jpg
     - assets/wallpaperflare.com_wallpaper-2.jpg
     - assets/wallpaperflare.com_wallpaper.jpg
+    - assets/image1.jpg
+    - assets/image2.jpg
+    - assets/image3.jpg
+    - assets/image4.jpg
+    - assets/image5.jpg

@@ -61,7 +61,7 @@ class KeepItApp implements AppDescriptor {
 
   @override
   CLRedirector get redirector => (String location) async {
-        if (location == "/") return "/tags";
+        if (location == "/") return "/home";
         return null;
       };
 }
