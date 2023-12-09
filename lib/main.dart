@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'pages/page_show_image.dart';
+import 'pages/page_tags.dart';
 import 'pages/views/shared_items_view.dart';
 
 class KeepItApp implements AppDescriptor {
@@ -29,6 +30,7 @@ class KeepItApp implements AppDescriptor {
     return {
       "home": (context) => const PageShowImage(
           imagePath: "assets/wallpaperflare.com_wallpaper-2.jpg"),
+      "tags": (context) => const TagsPage()
     };
   }
 
@@ -59,7 +61,7 @@ class KeepItApp implements AppDescriptor {
 
   @override
   CLRedirector get redirector => (String location) async {
-        if (location == "/") return "/home";
+        if (location == "/") return "/tags";
         return null;
       };
 }
