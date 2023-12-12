@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:keep_it/db/db.dart';
 
-import 'package:keep_it/db/models/item.dart';
 import 'package:keep_it/models/cluster.dart';
 import 'package:keep_it/models/collection.dart';
+import 'package:keep_it/models/item.dart';
 
 void main() {
   test('test database', () {

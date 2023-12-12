@@ -1,4 +1,3 @@
-import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,8 +20,7 @@ class CollectionsPage extends ConsumerWidget {
       error: (err, _) => ErrorView(
         errorMessage: err.toString(),
       ),
-      data: (collections) => CLFullscreenBoxType3(
-          child: CollectionsView2(collections: collections)),
+      data: (collections) => CollectionsView2(collections: collections),
     );
   }
 }
