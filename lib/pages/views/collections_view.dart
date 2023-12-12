@@ -9,8 +9,27 @@ import '../../constants.dart';
 import '../../models/collections.dart';
 
 import '../../providers/theme.dart';
-import 'collections_qmenu.dart';
 
+/**
+ * 
+ class QuickMenuGrid1 extends ConsumerWidget {
+  const QuickMenuGrid1({super.key, required this.menuItems});
+  final List<CLQuickMenuItem> menuItems;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final customTheme = ref.watch(customThemeDataProvider);
+    return Theme(
+      
+      child: DefaultTextStyle.merge(
+        
+        child: QuickMenuGrid(menuItems: menuItems),
+      ),
+    );
+  }
+}
+
+ */
 class CollectionsView2 extends ConsumerStatefulWidget {
   const CollectionsView2({super.key, required this.collections});
 
@@ -54,7 +73,30 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                             child: CLQuickMenuAnchor(
                               parentKey: quickMenuScopeKey,
                               menuBuilder: (context, boxconstraints) {
-                                return const CollectionsQMenu();
+                                return Theme(
+                                  data: customTheme.themeData,
+                                  child: DefaultTextStyle.merge(
+                                    style:
+                                        Theme.of(context).textTheme.bodyLarge,
+                                    child: CLQuickMenuGrid(
+                                      menuItems: [
+                                        CLQuickMenuItem(
+                                            'Paste', Icons.content_paste,
+                                            onTap: () => debugPrint("paste")),
+                                        CLQuickMenuItem(
+                                            'Settings', Icons.settings,
+                                            onTap: () =>
+                                                debugPrint("settings")),
+                                      ],
+                                      boxDecoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: customTheme.color,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                  ),
+                                );
                               },
                             ),
                           )
