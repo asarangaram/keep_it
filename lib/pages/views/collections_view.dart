@@ -9,27 +9,8 @@ import '../../constants.dart';
 import '../../models/collections.dart';
 
 import '../../providers/theme.dart';
+import 'collections_page/main_header.dart';
 
-/**
- * 
- class QuickMenuGrid1 extends ConsumerWidget {
-  const QuickMenuGrid1({super.key, required this.menuItems});
-  final List<CLQuickMenuItem> menuItems;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final customTheme = ref.watch(customThemeDataProvider);
-    return Theme(
-      
-      child: DefaultTextStyle.merge(
-        
-        child: QuickMenuGrid(menuItems: menuItems),
-      ),
-    );
-  }
-}
-
- */
 class CollectionsView2 extends ConsumerStatefulWidget {
   const CollectionsView2({super.key, required this.collections});
 
@@ -58,55 +39,15 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Expanded(
-                            child: Center(
-                              child: CLText.veryLarge("Collections"),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: CLQuickMenuAnchor(
-                              parentKey: quickMenuScopeKey,
-                              menuBuilder: (context, boxconstraints) {
-                                return Theme(
-                                  data: customTheme.themeData,
-                                  child: DefaultTextStyle.merge(
-                                    style:
-                                        Theme.of(context).textTheme.bodyLarge,
-                                    child: CLQuickMenuGrid(
-                                      menuItems: [
-                                        CLQuickMenuItem(
-                                            'Paste', Icons.content_paste,
-                                            onTap: () => debugPrint("paste")),
-                                        CLQuickMenuItem(
-                                            'Settings', Icons.settings,
-                                            onTap: () =>
-                                                debugPrint("settings")),
-                                      ],
-                                      boxDecoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: customTheme.color,
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
-                        ],
-                      ),
+                    MainHeader(quickMenuScopeKey: quickMenuScopeKey),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: CLText.large("Recent"),
                     ),
-                    Flexible(
+                    const Flexible(
                       child: AspectRatio(
-                          aspectRatio: Constants.aspectRatio,
-                          child: const Center(
+                          aspectRatio: 0.68,
+                          child: Center(
                             child: CLText.small(
                               "No collections found",
                             ),
