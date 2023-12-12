@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:keep_it/pages/views/styled_text.dart';
 
 import '../../constants.dart';
 
 import '../../models/collections.dart';
 
 import '../../providers/theme.dart';
+import 'collections_qmenu.dart';
 
 class CollectionsView2 extends ConsumerStatefulWidget {
   const CollectionsView2({super.key, required this.collections});
@@ -30,12 +30,6 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
     return CLFullscreenBoxType3(
       child: CLQuickMenuScope(
         key: quickMenuScopeKey,
-        menuItems: [
-          CLQuickMenuItem('Paste', Icons.content_paste,
-              onTap: () => debugPrint("paste")),
-          CLQuickMenuItem('Settings', Icons.settings,
-              onTap: () => debugPrint("settings")),
-        ],
         child: Theme(
           data: customTheme.themeData,
           child: DefaultTextStyle.merge(
@@ -59,6 +53,9 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                             padding: const EdgeInsets.only(right: 8),
                             child: CLQuickMenuAnchor(
                               parentKey: quickMenuScopeKey,
+                              menuBuilder: (context, boxconstraints) {
+                                return const CollectionsQMenu();
+                              },
                             ),
                           )
                         ],
@@ -67,59 +64,25 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                     Flexible(
                       child: AspectRatio(
                           aspectRatio: Constants.aspectRatio,
-                          child: Center(
-                            child: Text("No collections found",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(color: Colors.white)),
+                          child: const Center(
+                            child: CLText.small(
+                              "No collections found",
+                            ),
                           )),
                     ),
                     const SizedBox(
                       height: 8,
                     ),
-                    const Icon(
+                    CLIconButton.labelled(
                       Icons.add_circle_outline_outlined,
-                      color: Colors.white,
-                      size: 60,
-                    ),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: CLText.large("Recent"),
-                    ),
-                    Flexible(
-                      child: AspectRatio(
-                          aspectRatio: Constants.aspectRatio,
-                          child: Center(
-                            child: Text("No collections found",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge!
-                                    .copyWith(color: Colors.white)),
-                          )),
+                      label: "New Collection",
+                      onTap: () {},
                     ),
                   ]),
             ),
           ),
         ),
       ),
-    );
-  }
-}
-
-class MyPage extends StatelessWidget {
-  const MyPage({
-    super.key,
-    required this.collections,
-    required this.pageNum,
-  });
-  final Collections collections;
-  final int pageNum;
-
-  @override
-  Widget build(BuildContext context) {
-    return const SizedBox.expand(
-      child: MyGrid(),
     );
   }
 }

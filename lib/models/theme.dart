@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 
+Map<String, Color> _colors = {
+  "Ivory": const Color.fromARGB(255, 0xFF, 0xFF, 0xFF),
+  "Purple": const Color.fromARGB(255, 160, 32, 240),
+  "Silver": const Color.fromARGB(255, 192, 192, 192),
+};
+
 class CustomThemeData {
   late final TextStyle textStyleBase;
 
   late final ThemeData themeData;
 
-  final Color color;
+  late final Color color;
 
-  CustomThemeData({this.color = const Color.fromARGB(255, 0xFF, 0xFF, 0xFF)}) {
+  CustomThemeData() {
+    color = _colors["Silver"]!;
     textStyleBase = TextStyle(color: color, fontSize: 32);
     themeData = ThemeData(
         textTheme: TextTheme(
