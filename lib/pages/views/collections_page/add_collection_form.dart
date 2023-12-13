@@ -37,13 +37,13 @@ class _AddCollectionFormState extends ConsumerState<UpsertCollectionForm> {
   void initState() {
     editLabel = TextEditingController();
     editDescription = TextEditingController();
+    editLabel.text = widget.collection?.label ?? "";
+    editDescription.text = widget.collection?.description ?? "";
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    editLabel.text = widget.collection?.label ?? "";
-    editDescription.text = widget.collection?.description ?? "";
     super.didChangeDependencies();
   }
 
