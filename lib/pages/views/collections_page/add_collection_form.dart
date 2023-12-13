@@ -92,7 +92,7 @@ class _AddCollectionFormState extends ConsumerState<UpsertCollectionForm> {
                   if (dbError != null) CLBlink(child: CLText.small(dbError!)),
                   Align(
                     alignment: Alignment.center,
-                    child: CLStandardButton(
+                    child: TextButton(
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           setState(() {
@@ -122,7 +122,7 @@ class _AddCollectionFormState extends ConsumerState<UpsertCollectionForm> {
                           Navigator.of(context).pop(); // Close the dialog
                         }
                       },
-                      label: CLText.large((widget.collection?.id == null)
+                      child: CLText.large((widget.collection?.id == null)
                           ? "Create"
                           : "Update"),
                     ),
@@ -143,11 +143,11 @@ class _AddCollectionFormState extends ConsumerState<UpsertCollectionForm> {
                               : null,
                           scaleType: CLScaleType.verySmall,
                         ),
-                        CLStandardButton(
+                        TextButton(
                           onPressed: () {
                             Navigator.of(context).pop(); // Close the dialog
                           },
-                          label: const CLText.verySmall("Cancel"),
+                          child: const CLText.verySmall("Cancel"),
                         ),
                       ],
                     ),

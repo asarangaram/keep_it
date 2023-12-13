@@ -63,8 +63,8 @@ class SharedItemsViewInternal extends ConsumerWidget {
                 ])),
                 const SizedBox(height: 16),
               ],
-              CLStandardButton(
-                  label: const CLText.medium("Save"),
+              TextButton(
+                  child: const CLText.medium("Save"),
                   onPressed: () {
                     // TODO: Implement
                     //onDiscard();
@@ -74,7 +74,7 @@ class SharedItemsViewInternal extends ConsumerWidget {
           Positioned(
               top: 16,
               right: 16,
-              child: CLStandardButton.icon(
+              child: IconButton(
                 icon: const Icon(Icons.close),
                 onPressed: onDiscard,
               ))

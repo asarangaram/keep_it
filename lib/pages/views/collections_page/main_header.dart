@@ -1,7 +1,6 @@
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:keep_it/utils/extensions.dart';
 
 import '../../../providers/theme.dart';
 import '../app_theme.dart';

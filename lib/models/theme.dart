@@ -15,7 +15,7 @@ class CustomThemeData {
   late final Color color;
 
   CustomThemeData() {
-    color = _colors["Ivory"]!;
+    color = _colors["Purple"]!;
     textStyleBase = TextStyle(color: color, fontSize: 32);
     themeData = ThemeData(
         primaryColor: color,
