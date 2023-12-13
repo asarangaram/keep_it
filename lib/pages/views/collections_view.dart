@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -164,14 +162,9 @@ class CLRoundIconLabeled extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: DecoratedBox(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(12)),
-                          color: child != null
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.primaries[
-                                  Random().nextInt(Colors.primaries.length)],
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                         child: child),
                   ),
@@ -186,11 +179,6 @@ class CLRoundIconLabeled extends StatelessWidget {
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .primaryTextTheme
-                          .labelLarge!
-                          .copyWith(
-                              color: Colors.white, fontFamily: 'SF Pro Text'),
                     ),
                   ),
                 )

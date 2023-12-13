@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keep_it/models/collection.dart';
 import 'package:keep_it/providers/db_store.dart';
-import 'package:keep_it/utils/extensions.dart';
 
 import '../../../models/collections.dart';
-import '../../../providers/theme.dart';
+
 import '../app_theme.dart';
 
 class UpsertCollectionForm extends ConsumerStatefulWidget {
@@ -56,18 +55,13 @@ class _AddCollectionFormState extends ConsumerState<UpsertCollectionForm> {
 
   @override
   Widget build(BuildContext context) {
-    final customTheme = ref.watch(customThemeDataProvider);
-
     return AppTheme(
       child: Dialog(
-        backgroundColor: Colors.transparent,
         child: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-                border: Border.all(color: customTheme.color),
-                color: customTheme.color.invertColor().withAlpha(128),
-                borderRadius: BorderRadius.circular(8.0)),
+                border: Border.all(), borderRadius: BorderRadius.circular(8.0)),
             child: Form(
               key: formKey,
               child: Column(
