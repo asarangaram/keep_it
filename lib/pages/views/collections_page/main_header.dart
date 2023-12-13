@@ -41,7 +41,8 @@ class MainHeader extends ConsumerWidget {
                           onTap: () => debugPrint("settings")),
                     ],
                     backgroundColor:
-                        customTheme.color.invertColor().withAlpha(128),
+                        Theme.of(context).colorScheme.onSurface.withAlpha(128),
+                    //customTheme.color.invertColor().withAlpha(128),
                     foregroundColor: customTheme.color,
                   ),
                 );
