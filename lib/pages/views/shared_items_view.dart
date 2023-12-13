@@ -64,7 +64,7 @@ class SharedItemsViewInternal extends ConsumerWidget {
                 const SizedBox(height: 16),
               ],
               CLStandardButton(
-                  label: const Text("Save"),
+                  label: const CLText.medium("Save"),
                   onPressed: () {
                     // TODO: Implement
                     //onDiscard();

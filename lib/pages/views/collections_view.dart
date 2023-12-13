@@ -6,9 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
 
+import '../../models/collection.dart';
 import '../../models/collections.dart';
 
-import '../../providers/theme.dart';
+import 'app_theme.dart';
+import 'collections_page/add_collection.dart';
 import 'collections_page/main_header.dart';
 
 class CollectionsView2 extends ConsumerStatefulWidget {
@@ -23,46 +25,65 @@ class CollectionsView2 extends ConsumerStatefulWidget {
 
 class _CollectionsView2State extends ConsumerState<CollectionsView2> {
   final GlobalKey quickMenuScopeKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
-    final customTheme = ref.watch(customThemeDataProvider);
-
     return CLFullscreenBoxType3(
       child: CLQuickMenuScope(
         key: quickMenuScopeKey,
-        child: Theme(
-          data: customTheme.themeData,
-          child: DefaultTextStyle.merge(
-            style: Theme.of(context).textTheme.bodyLarge,
-            child: SingleChildScrollView(
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    MainHeader(quickMenuScopeKey: quickMenuScopeKey),
-                    const Align(
-                      alignment: Alignment.centerLeft,
-                      child: CLText.large("Recent"),
-                    ),
-                    const Flexible(
-                      child: AspectRatio(
-                          aspectRatio: 0.68,
-                          child: Center(
-                            child: CLText.small(
-                              "No collections found",
-                            ),
-                          )),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    CLIconButton.labelled(
-                      Icons.add_circle_outline_outlined,
-                      label: "New Collection",
-                      onTap: () {},
-                    ),
-                  ]),
-            ),
+        child: AppTheme(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        MainHeader(quickMenuScopeKey: quickMenuScopeKey),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: CLText.large("Your Collections"),
+                        ),
+                        Flexible(
+                          child: AspectRatio(
+                              aspectRatio: Constants.aspectRatio,
+                              child: Column(
+                                children: [
+                                  if (widget.collections.isEmpty)
+                                    const Center(
+                                      child: CLText.small(
+                                        "No collections found",
+                                      ),
+                                    )
+                                  else
+                                    Expanded(
+                                      child: CLPageView(
+                                        pageBuilder: (BuildContext context,
+                                            int pageNum) {
+                                          return Align(
+                                            alignment: Alignment.topLeft,
+                                            child: MyGrid(
+                                              collections: widget.collections
+                                                  .page(pageNum),
+                                            ),
+                                          );
+                                        },
+                                        pageMax: widget.collections.pageMax,
+                                      ),
+                                    )
+                                ],
+                              )),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                      ]),
+                ),
+              ),
+              AddNewCollection(quickMenuScopeKey: quickMenuScopeKey)
+            ],
           ),
         ),
       ),
@@ -71,25 +92,28 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
 }
 
 class MyGrid extends ConsumerWidget {
-  const MyGrid({super.key});
+  const MyGrid({
+    super.key,
+    required this.collections,
+  });
+  final List<Collection> collections;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          for (var c = 0; c < 4; c++)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                for (var r = 0; r < 4; r++)
-                  Expanded(
-                    child: CLRoundIconLabeled(
-                        label: r == 1 ? "tiny" : "12345678901234567890 "),
-                  ),
-              ],
-            )
-        ]);
+    return GridView.count(
+      crossAxisCount: 4,
+      padding: EdgeInsets.zero,
+      crossAxisSpacing: 2,
+      mainAxisSpacing: 2,
+      shrinkWrap: true,
+      childAspectRatio: Constants.aspectRatio,
+      physics: const NeverScrollableScrollPhysics(),
+      children: collections
+          .map((Collection e) => CLRoundIconLabeled(
+                label: e.label,
+              ))
+          .toList(),
+    );
   }
 }
 
@@ -118,14 +142,16 @@ class CLRoundIconLabeled extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 2.0),
                 child: AspectRatio(
                   aspectRatio: 1.0,
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: DecoratedBox(
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
+                          shape: BoxShape.rectangle,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(12)),
                           color: child != null
                               ? Theme.of(context).colorScheme.primary
                               : Colors.primaries[

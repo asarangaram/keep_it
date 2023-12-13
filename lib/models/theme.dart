@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keep_it/utils/extensions.dart';
 
 Map<String, Color> _colors = {
   "Ivory": const Color.fromARGB(255, 0xFF, 0xFF, 0xFF),
@@ -14,9 +15,26 @@ class CustomThemeData {
   late final Color color;
 
   CustomThemeData() {
-    color = _colors["Silver"]!;
+    color = _colors["Ivory"]!;
     textStyleBase = TextStyle(color: color, fontSize: 32);
     themeData = ThemeData(
+        primaryColor: color,
+        inputDecorationTheme: InputDecorationTheme(
+          focusColor: color,
+          labelStyle: TextStyle(color: color.reduceBrightness(0.5)),
+          floatingLabelStyle: TextStyle(color: color.reduceBrightness(0.5)),
+          hintStyle: TextStyle(color: color.reduceBrightness(0.5)),
+          errorStyle: TextStyle(color: color),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(style: BorderStyle.solid, color: color),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(style: BorderStyle.solid, color: color),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(style: BorderStyle.solid, color: color),
+          ),
+        ),
         textTheme: TextTheme(
           displayLarge: textStyleBase.copyWith(fontSize: 32),
           displayMedium: textStyleBase.copyWith(fontSize: 31),

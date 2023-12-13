@@ -16,10 +16,13 @@ class KeepItApp implements AppDescriptor {
   @override
   CLAppInitializer get appInitializer => (ref) async {
         //TODO: Delete only if saved preference is set to reset
-        final appDir = await getApplicationDocumentsDirectory();
-        final fullPath = path.join(appDir.path, 'keepIt.db');
-        if (File(fullPath).existsSync()) {
-          File(fullPath).delete();
+        // ignore: dead_code
+        if (false) {
+          final appDir = await getApplicationDocumentsDirectory();
+          final fullPath = path.join(appDir.path, 'keepIt.db');
+          if (File(fullPath).existsSync()) {
+            File(fullPath).delete();
+          }
         }
 
         return true;
