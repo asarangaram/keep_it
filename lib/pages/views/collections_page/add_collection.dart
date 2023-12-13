@@ -26,10 +26,10 @@ class _AddNewCollectionState extends ConsumerState<AddNewCollection> {
       Icons.add_circle_outline_outlined,
       label: "New Collection",
       onTap: collectionsAsync.whenOrNull(
-          data: (collection) => () => showDialog<void>(
+          data: (collections) => () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) {
-                  return AddCollectionForm(collections: collection);
+                  return UpsertCollectionForm(collections: collections);
                 },
               )),
     );

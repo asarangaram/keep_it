@@ -9,18 +9,21 @@ import '../../../models/collections.dart';
 import '../../../providers/theme.dart';
 import '../app_theme.dart';
 
-class AddCollectionForm extends ConsumerStatefulWidget {
-  const AddCollectionForm({
+class UpsertCollectionForm extends ConsumerStatefulWidget {
+  const UpsertCollectionForm({
     super.key,
     required this.collections,
+    this.collection,
   });
   final Collections collections;
+  final Collection? collection;
 
   @override
-  ConsumerState<AddCollectionForm> createState() => _AddCollectionFormState();
+  ConsumerState<UpsertCollectionForm> createState() =>
+      _AddCollectionFormState();
 }
 
-class _AddCollectionFormState extends ConsumerState<AddCollectionForm> {
+class _AddCollectionFormState extends ConsumerState<UpsertCollectionForm> {
   String? dbError;
   String? dbErrorDetail;
   late final TextEditingController editLabel;
@@ -35,6 +38,13 @@ class _AddCollectionFormState extends ConsumerState<AddCollectionForm> {
     editLabel = TextEditingController();
     editDescription = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    editLabel.text = widget.collection?.label ?? "";
+    editDescription.text = widget.collection?.description ?? "";
+    super.didChangeDependencies();
   }
 
   @override
@@ -99,7 +109,9 @@ class _AddCollectionFormState extends ConsumerState<AddCollectionForm> {
                             ref
                                 .read(collectionsProvider(null).notifier)
                                 .upsertCollection(Collection(
-                                    label: label, description: description));
+                                    id: widget.collection?.id,
+                                    label: label,
+                                    description: description));
                           } catch (e) {
                             setState(() {
                               dbError = "Unable to create Collection; ";
@@ -110,7 +122,9 @@ class _AddCollectionFormState extends ConsumerState<AddCollectionForm> {
                           Navigator.of(context).pop(); // Close the dialog
                         }
                       },
-                      label: const CLText.large("Create"),
+                      label: CLText.large((widget.collection?.id == null)
+                          ? "Create"
+                          : "Update"),
                     ),
                   ),
                   Align(

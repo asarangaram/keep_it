@@ -9,8 +9,10 @@ import '../../constants.dart';
 import '../../models/collection.dart';
 import '../../models/collections.dart';
 
+import '../../providers/db_store.dart';
 import 'app_theme.dart';
 import 'collections_page/add_collection.dart';
+import 'collections_page/add_collection_form.dart';
 import 'collections_page/main_header.dart';
 
 class CollectionsView2 extends ConsumerStatefulWidget {
@@ -64,8 +66,9 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                                             int pageNum) {
                                           return Align(
                                             alignment: Alignment.topLeft,
-                                            child: MyGrid(
-                                              collections: widget.collections
+                                            child: CollectionGrid(
+                                              collectionsPage: widget
+                                                  .collections
                                                   .page(pageNum),
                                             ),
                                           );
@@ -91,15 +94,16 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
   }
 }
 
-class MyGrid extends ConsumerWidget {
-  const MyGrid({
+class CollectionGrid extends ConsumerWidget {
+  const CollectionGrid({
     super.key,
-    required this.collections,
+    required this.collectionsPage,
   });
-  final List<Collection> collections;
+  final List<Collection> collectionsPage;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final collectionsAsync = ref.read(collectionsProvider(null));
     return GridView.count(
       crossAxisCount: 4,
       padding: EdgeInsets.zero,
@@ -108,9 +112,21 @@ class MyGrid extends ConsumerWidget {
       shrinkWrap: true,
       childAspectRatio: Constants.aspectRatio,
       physics: const NeverScrollableScrollPhysics(),
-      children: collections
-          .map((Collection e) => CLRoundIconLabeled(
-                label: e.label,
+      children: collectionsPage
+          .map((Collection e) => GestureDetector(
+                onLongPress: collectionsAsync.whenOrNull(
+                    data: (collections) => () => showDialog<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return UpsertCollectionForm(
+                              collections: collections,
+                              collection: e,
+                            );
+                          },
+                        )),
+                child: CLRoundIconLabeled(
+                  label: e.label,
+                ),
               ))
           .toList(),
     );
@@ -183,31 +199,5 @@ class CLRoundIconLabeled extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class MyCustomClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    final path = Path()
-      ..moveTo(0, size.height / 2) // starting point at the left middle
-      ..lineTo(size.width, size.height / 2) // straight line to the right middle
-      ..arcToPoint(
-        const Offset(0, 0),
-        radius: Radius.circular(size.height / 2),
-        clockwise: false,
-      ) // upper-left curve
-      ..arcToPoint(
-        Offset(size.width, size.height),
-        radius: Radius.circular(size.height / 2),
-        clockwise: false,
-      ); // lower-right curve
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return false;
   }
 }
