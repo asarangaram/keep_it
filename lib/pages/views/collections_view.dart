@@ -180,7 +180,7 @@ class CLRoundIconLabeled extends StatelessWidget {
               if (label != null)
                 Expanded(
                   child: Align(
-                    alignment: Alignment.center,
+                    alignment: Alignment.topCenter,
                     child: Text(
                       label!,
                       maxLines: 2,
