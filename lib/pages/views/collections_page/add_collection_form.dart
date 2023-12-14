@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,9 +7,7 @@ import 'package:keep_it/providers/db_store.dart';
 
 import '../../../models/collections.dart';
 
-import '../app_theme.dart';
-
-class UpsertCollectionForm extends ConsumerStatefulWidget {
+class UpsertCollectionForm extends ConsumerWidget {
   const UpsertCollectionForm({
     super.key,
     required this.collections,
@@ -18,151 +17,53 @@ class UpsertCollectionForm extends ConsumerStatefulWidget {
   final Collection? collection;
 
   @override
-  ConsumerState<UpsertCollectionForm> createState() =>
-      _AddCollectionFormState();
-}
-
-class _AddCollectionFormState extends ConsumerState<UpsertCollectionForm> {
-  String? dbError;
-  String? dbErrorDetail;
-  late final TextEditingController editLabel;
-  late final TextEditingController editDescription;
-
-  late FocusNode focusLabel = FocusNode();
-  late FocusNode focusDescription = FocusNode();
-  final formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    editLabel = TextEditingController();
-    editDescription = TextEditingController();
-    editLabel.text = widget.collection?.label ?? "";
-    editDescription.text = widget.collection?.description ?? "";
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    editLabel.dispose();
-    editDescription.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppTheme(
-      child: Dialog(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-                border: Border.all(), borderRadius: BorderRadius.circular(8.0)),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  CLTextField.form(
-                    editLabel,
-                    label: "Name",
-                    validator: validateName,
-                    focusNode: focusLabel,
-                    onFieldSubmitted: (p0) {
-                      FocusScope.of(context).requestFocus(focusDescription);
-                    },
-                    textInputAction: TextInputAction.next,
-                  ),
-                  const SizedBox(height: 16.0),
-                  CLTextField.multiLineForm(editDescription,
-                      label: "Description",
-                      validator: validateDescription,
-                      focusNode: focusDescription),
-                  const SizedBox(height: 16.0),
-                  if (dbError != null) CLBlink(child: CLText.small(dbError!)),
-                  Align(
-                    alignment: Alignment.center,
-                    child: TextButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          setState(() {
-                            dbError = null;
-                            dbErrorDetail = null;
-                          });
-                          // Do something with the entered values
-                          final label = editLabel.text;
-                          final description =
-                              editDescription.text.trim().isEmpty
-                                  ? null
-                                  : editDescription.text;
-                          try {
-                            ref
-                                .read(collectionsProvider(null).notifier)
-                                .upsertCollection(Collection(
-                                    id: widget.collection?.id,
-                                    label: label,
-                                    description: description));
-                          } catch (e) {
-                            setState(() {
-                              dbError = "Unable to create Collection; ";
-                              dbErrorDetail = e.toString();
-                            });
-                          }
-
-                          Navigator.of(context).pop(); // Close the dialog
-                        }
-                      },
-                      child: CLText.large((widget.collection?.id == null)
-                          ? "Create"
-                          : "Update"),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CLIconButton(
-                          Icons.keyboard_hide,
-                          onTap: (FocusScope.of(context).focusedChild != null)
-                              ? () {
-                                  FocusScope.of(context)
-                                      .focusedChild!
-                                      .unfocus();
-                                }
-                              : null,
-                          scaleType: CLScaleType.verySmall,
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop(); // Close the dialog
-                          },
-                          child: const CLText.verySmall("Cancel"),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<CLFormField> clFormFields = [
+      CLFormField(
+        type: CLFormFieldTypes.textField,
+        validator: (name) => validateName(name, collections),
+        label: "Name",
+        initialValue: collection?.label ?? "",
       ),
-    );
+      CLFormField(
+        type: CLFormFieldTypes.textFieldMultiLine,
+        validator: validateDescription,
+        label: "Description",
+        initialValue: collection?.description ?? "",
+      )
+    ];
+
+    return CLTextFieldForm(
+        buttonLabel: (collection?.id == null) ? "Create" : "Update",
+        clFormFields: clFormFields,
+        onCancel: () => Navigator.of(context).pop(), // Close the dialog},
+        onSubmit: (List<String> values) {
+          final label = values[0];
+          final description =
+              values[1].trim().isEmpty ? null : values[1].trim();
+
+          try {
+            ref.read(collectionsProvider(null).notifier).upsertCollection(
+                Collection(
+                    id: collection?.id,
+                    label: label,
+                    description: description));
+          } catch (e) {
+            return e.toString();
+          }
+          Navigator.of(context).pop(); // Close the dialog
+          return null;
+        });
   }
 
-  String? validateName(String? name) {
+  String? validateName(String? name, Collections collections) {
     if (name?.isEmpty ?? true) {
       return "Have a good name";
     }
     if (name!.length > 16) {
       return "Name should not exceed 15 letters";
     }
-    if (widget.collections.collections.map((e) => e.label).contains(name)) {
+    if (collections.collections.map((e) => e.label).contains(name)) {
       return "$name already exists";
     }
     return null;

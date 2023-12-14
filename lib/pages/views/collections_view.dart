@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,7 +30,8 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
 
   @override
   Widget build(BuildContext context) {
-    return CLFullscreenBoxType3(
+    return CLFullscreenBox(
+      isSafeArea: true,
       child: CLQuickMenuScope(
         key: quickMenuScopeKey,
         child: AppTheme(
@@ -44,7 +47,10 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                         MainHeader(quickMenuScopeKey: quickMenuScopeKey),
                         const Align(
                           alignment: Alignment.centerLeft,
-                          child: CLText.large("Your Collections"),
+                          child: CLText.large(
+                            "Your Collections",
+                            color: Colors.black,
+                          ),
                         ),
                         Flexible(
                           child: AspectRatio(
@@ -54,8 +60,8 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                                   if (widget.collections.isEmpty)
                                     const Center(
                                       child: CLText.small(
-                                        "No collections found",
-                                      ),
+                                          "No collections found",
+                                          color: Colors.black),
                                     )
                                   else
                                     Expanded(
@@ -162,9 +168,12 @@ class CLRoundIconLabeled extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: DecoratedBox(
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          color: Colors.primaries[
+                              Random().nextInt(Colors.primaries.length)],
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(12)),
                         ),
                         child: child),
                   ),

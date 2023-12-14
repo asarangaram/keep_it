@@ -22,16 +22,18 @@ class _AddNewCollectionState extends ConsumerState<AddNewCollection> {
   Widget build(BuildContext context) {
     final collectionsAsync = ref.read(collectionsProvider(null));
 
-    return CLIconButton.labelled(
+    return CLButtonIconLabelled.medium(
       Icons.add_circle_outline_outlined,
-      label: "New Collection",
-      onTap: collectionsAsync.whenOrNull(
+      "New Collection",
+      onPressed: collectionsAsync.whenOrNull(
           data: (collections) => () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) {
-                  return UpsertCollectionForm(collections: collections);
+                  return Dialog(
+                      child: UpsertCollectionForm(collections: collections));
                 },
               )),
+      color: Colors.black,
     );
   }
 }

@@ -21,7 +21,10 @@ class MainHeader extends ConsumerWidget {
         children: [
           const Expanded(
             child: Center(
-              child: CLText.veryLarge("Collections"),
+              child: CLText.veryLarge(
+                "Collections",
+                color: Colors.black,
+              ),
             ),
           ),
           Padding(
@@ -30,13 +33,16 @@ class MainHeader extends ConsumerWidget {
               parentKey: quickMenuScopeKey,
               menuBuilder: (context, boxconstraints) {
                 return AppTheme(
-                  child: CLQuickMenuGrid(
+                  child: CLQuickMenuGrid.tiny(
                     menuItems: [
                       CLQuickMenuItem('Paste', Icons.content_paste,
                           onTap: () => debugPrint("paste")),
                       CLQuickMenuItem('Settings', Icons.settings,
                           onTap: () => debugPrint("settings")),
                     ],
+                    foregroundColor: Colors.black,
+                    backgroundColor: Colors.white,
+                    disabledColor: Colors.grey,
                   ),
                 );
               },

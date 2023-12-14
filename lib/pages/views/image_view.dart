@@ -36,7 +36,7 @@ class ImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CLFullscreenBoxType2(
+    return CLFullscreenBox(
       child: FutureBuilder<ui.Image>(
         future: getImageGrid(),
         builder: (context, snapshot) {

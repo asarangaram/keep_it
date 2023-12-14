@@ -7,7 +7,6 @@ class AppTheme extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return DefaultTextStyle.merge(
-        style: Theme.of(context).textTheme.bodyLarge, child: child);
+    return child;
   }
 }

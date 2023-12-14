@@ -6,9 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../db/db.dart';
 import '../../providers/db_manager.dart';
 
-import 'error_view.dart';
-import 'loading_view.dart';
-
 class SharedItemsView extends ConsumerWidget {
   const SharedItemsView({
     super.key,
@@ -27,8 +24,8 @@ class SharedItemsView extends ConsumerWidget {
               onDiscard: onDiscard,
               dbManager: dbManager,
             ),
-        loading: () => const LoadingView(),
-        error: (err, _) => ErrorView(errorMessage: err.toString()));
+        loading: () => const CLLoadingView(),
+        error: (err, _) => CLErrorView(errorMessage: err.toString()));
   }
 }
 
@@ -46,8 +43,8 @@ class SharedItemsViewInternal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CLFullscreenBoxType1(
-      safeArea: true,
+    return CLFullscreenBox(
+      isSafeArea: true,
       child: Stack(
         children: [
           Center(
@@ -64,7 +61,10 @@ class SharedItemsViewInternal extends ConsumerWidget {
                 const SizedBox(height: 16),
               ],
               TextButton(
-                  child: const CLText.medium("Save"),
+                  child: const CLText.medium(
+                    "Save",
+                    color: Colors.black,
+                  ),
                   onPressed: () {
                     // TODO: Implement
                     //onDiscard();

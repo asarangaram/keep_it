@@ -1,12 +1,11 @@
 import 'dart:ui' as ui;
 
 import 'package:app_loader/app_loader.dart';
+import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'views/error_view.dart';
 import 'views/image_view.dart';
-import 'views/loading_view.dart';
 
 class PageShowImage extends ConsumerWidget {
   const PageShowImage({
@@ -22,7 +21,7 @@ class PageShowImage extends ConsumerWidget {
         data: (ui.Image image) => ImageView(
               image: image,
             ),
-        loading: () => const LoadingView(),
-        error: (err, _) => ErrorView(errorMessage: err.toString()));
+        loading: () => const CLLoadingView(),
+        error: (err, _) => CLErrorView(errorMessage: err.toString()));
   }
 }
