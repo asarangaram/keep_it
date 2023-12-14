@@ -3,9 +3,11 @@ import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keep_it/models/collection.dart';
+
 import 'package:keep_it/providers/db_store.dart';
 
 import '../../../models/collections.dart';
+import '../../../models/theme.dart';
 
 class UpsertCollectionForm extends ConsumerWidget {
   const UpsertCollectionForm({
@@ -18,10 +20,11 @@ class UpsertCollectionForm extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
     List<CLFormField> clFormFields = [
       CLFormField(
         type: CLFormFieldTypes.textField,
-        validator: (name) => validateName(name, collections),
+        validator: (name) => validateName(name),
         label: "Name",
         initialValue: collection?.label ?? "",
       ),
@@ -34,36 +37,46 @@ class UpsertCollectionForm extends ConsumerWidget {
     ];
 
     return CLTextFieldForm(
-        buttonLabel: (collection?.id == null) ? "Create" : "Update",
-        clFormFields: clFormFields,
-        onCancel: () => Navigator.of(context).pop(), // Close the dialog},
-        onSubmit: (List<String> values) {
-          final label = values[0];
-          final description =
-              values[1].trim().isEmpty ? null : values[1].trim();
+      buttonLabel: (collection?.id == null) ? "Create" : "Update",
+      clFormFields: clFormFields,
+      onCancel: () => Navigator.of(context).pop(), // Close the dialog},
+      onSubmit: (List<String> values) {
+        final label = values[0];
+        final description = values[1].trim().isEmpty ? null : values[1].trim();
 
-          try {
-            ref.read(collectionsProvider(null).notifier).upsertCollection(
-                Collection(
-                    id: collection?.id,
-                    label: label,
-                    description: description));
-          } catch (e) {
-            return e.toString();
-          }
-          Navigator.of(context).pop(); // Close the dialog
-          return null;
-        });
+        try {
+          ref.read(collectionsProvider(null).notifier).upsertCollection(
+              Collection(
+                  id: collection?.id,
+                  label: label.trim(),
+                  description: description));
+        } catch (e) {
+          return e.toString();
+        }
+        Navigator.of(context).pop(); // Close the dialog
+        return null;
+      },
+      foregroundColor: theme.colorTheme.textColor,
+      backgroundColor: theme.colorTheme.overlayBackgroundColor,
+      disabledColor: theme.colorTheme.disabledColor,
+      errorColor: theme.colorTheme.errorColor,
+    );
   }
 
-  String? validateName(String? name, Collections collections) {
+  String? validateName(String? name) {
     if (name?.isEmpty ?? true) {
       return "Have a good name";
     }
     if (name!.length > 16) {
       return "Name should not exceed 15 letters";
     }
-    if (collections.collections.map((e) => e.label).contains(name)) {
+    if (collection?.label == name) {
+      // Nothing changed.
+      return null;
+    }
+    if (collections.collections
+        .map((e) => e.label.trim())
+        .contains(name.trim())) {
       return "$name already exists";
     }
     return null;

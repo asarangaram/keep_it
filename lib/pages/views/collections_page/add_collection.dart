@@ -2,6 +2,7 @@ import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../models/theme.dart';
 import '../../../providers/db_store.dart';
 import 'add_collection_form.dart';
 
@@ -21,7 +22,7 @@ class _AddNewCollectionState extends ConsumerState<AddNewCollection> {
   @override
   Widget build(BuildContext context) {
     final collectionsAsync = ref.read(collectionsProvider(null));
-
+    final theme = ref.watch(themeProvider);
     return CLButtonIconLabelled.medium(
       Icons.add_circle_outline_outlined,
       "New Collection",
@@ -30,10 +31,12 @@ class _AddNewCollectionState extends ConsumerState<AddNewCollection> {
                 context: context,
                 builder: (BuildContext context) {
                   return Dialog(
+                      backgroundColor: theme.colorTheme.backgroundColor,
+                      insetPadding: const EdgeInsets.all(8.0),
                       child: UpsertCollectionForm(collections: collections));
                 },
               )),
-      color: Colors.black,
+      color: theme.colorTheme.textColor,
     );
   }
 }

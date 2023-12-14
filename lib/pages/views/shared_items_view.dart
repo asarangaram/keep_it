@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../db/db.dart';
+import '../../models/theme.dart';
 import '../../providers/db_manager.dart';
 
 class SharedItemsView extends ConsumerWidget {
@@ -43,6 +44,7 @@ class SharedItemsViewInternal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
     return CLFullscreenBox(
       isSafeArea: true,
       child: Stack(
@@ -61,9 +63,9 @@ class SharedItemsViewInternal extends ConsumerWidget {
                 const SizedBox(height: 16),
               ],
               TextButton(
-                  child: const CLText.medium(
+                  child: CLText.medium(
                     "Save",
-                    color: Colors.black,
+                    color: theme.colorTheme.textColor,
                   ),
                   onPressed: () {
                     // TODO: Implement

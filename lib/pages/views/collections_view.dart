@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
@@ -9,6 +10,7 @@ import '../../constants.dart';
 import '../../models/collection.dart';
 import '../../models/collections.dart';
 
+import '../../models/theme.dart';
 import '../../providers/db_store.dart';
 import 'app_theme.dart';
 import 'collections_page/add_collection.dart';
@@ -30,8 +32,14 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = ref.watch(themeProvider);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.blue,
+    ));
+
     return CLFullscreenBox(
       isSafeArea: true,
+      backgroundColor: theme.colorTheme.backgroundColor,
       child: CLQuickMenuScope(
         key: quickMenuScopeKey,
         child: AppTheme(
@@ -45,11 +53,11 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         MainHeader(quickMenuScopeKey: quickMenuScopeKey),
-                        const Align(
+                        Align(
                           alignment: Alignment.centerLeft,
-                          child: CLText.large(
+                          child: CLText.mediumLabel(
                             "Your Collections",
-                            color: Colors.black,
+                            color: theme.colorTheme.textColor,
                           ),
                         ),
                         Flexible(
@@ -58,10 +66,11 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                               child: Column(
                                 children: [
                                   if (widget.collections.isEmpty)
-                                    const Center(
+                                    Center(
                                       child: CLText.small(
-                                          "No collections found",
-                                          color: Colors.black),
+                                        "No collections found",
+                                        color: theme.colorTheme.textColor,
+                                      ),
                                     )
                                   else
                                     Expanded(
@@ -108,6 +117,7 @@ class CollectionGrid extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final collectionsAsync = ref.read(collectionsProvider(null));
+    final theme = ref.watch(themeProvider);
     return GridView.count(
       crossAxisCount: 4,
       padding: EdgeInsets.zero,
@@ -122,9 +132,13 @@ class CollectionGrid extends ConsumerWidget {
                     data: (collections) => () => showDialog<void>(
                           context: context,
                           builder: (BuildContext context) {
-                            return UpsertCollectionForm(
-                              collections: collections,
-                              collection: e,
+                            return Dialog(
+                              backgroundColor: theme.colorTheme.backgroundColor,
+                              insetPadding: const EdgeInsets.all(8.0),
+                              child: UpsertCollectionForm(
+                                collections: collections,
+                                collection: e,
+                              ),
                             );
                           },
                         )),
