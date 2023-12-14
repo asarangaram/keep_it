@@ -19,8 +19,8 @@ class Collections {
   int get pageMax => pages.length;
 
   List<Collection> page(int pageNum) {
-    if (pageNum > pageMax) {
-      throw Exception("Invalid page");
+    if (pageNum >= pageMax) {
+      return pages[pageMax - 1];
     }
     return pages[pageNum];
   }

@@ -140,15 +140,24 @@ class CollectionGrid extends ConsumerWidget {
                       menuItems: [
                         CLQuickMenuItem('Edit', Icons.edit,
                             onTap: collectionsAsync.whenOrNull(
-                                data: (Collections collections) =>
-                                    () => showDialog<void>(
-                                          context: context,
-                                          builder: (context) => buildEditor(
-                                              context, collections, e, theme,
-                                              onDone: onDone),
-                                        ))),
-                        CLQuickMenuItem('Delete', Icons.delete,
-                            onTap: () => debugPrint("delete")),
+                                data: (Collections collections) => () {
+                                      onDone.call();
+                                      showDialog<void>(
+                                        context: context,
+                                        builder: (context) => buildEditor(
+                                          context,
+                                          collections,
+                                          e,
+                                          theme,
+                                        ),
+                                      );
+                                    })),
+                        CLQuickMenuItem('Delete', Icons.delete, onTap: () {
+                          onDone.call();
+                          ref
+                              .read(collectionsProvider(null).notifier)
+                              .deleteCollection(e);
+                        }),
                       ],
                       foregroundColor: theme.colorTheme.textColor,
                       backgroundColor: theme.colorTheme.overlayBackgroundColor,
@@ -164,19 +173,10 @@ class CollectionGrid extends ConsumerWidget {
     );
   }
 }
-/***
- * 
- onLongPress: collectionsAsync.whenOrNull(
-                    data: (Collections collections) => () => showDialog<void>(
-                          context: context,
-                          builder: (context) =>
-                              buildEditor(context, collections, e, theme),
-                        )),
- */
 
 buildEditor(BuildContext context, Collections collections,
     Collection collection, KeepItTheme theme,
-    {required Function() onDone}) {
+    {Function()? onDone}) {
   return Dialog(
     backgroundColor: theme.colorTheme.backgroundColor,
     insetPadding: const EdgeInsets.all(8.0),
