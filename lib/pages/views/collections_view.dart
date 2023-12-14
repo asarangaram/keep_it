@@ -133,12 +133,20 @@ class CollectionGrid extends ConsumerWidget {
       children: collectionsPage
           .map((Collection e) => CLQuickMenuAnchor.longPress(
                 parentKey: quickMenuScopeKey,
-                menuBuilder: (context, boxconstraints) {
+                menuBuilder: (context, boxconstraints,
+                    {required Function() onDone}) {
                   return AppTheme(
                     child: CLQuickMenuGrid.tiny(
                       menuItems: [
                         CLQuickMenuItem('Edit', Icons.edit,
-                            onTap: () => debugPrint("edit")),
+                            onTap: collectionsAsync.whenOrNull(
+                                data: (Collections collections) =>
+                                    () => showDialog<void>(
+                                          context: context,
+                                          builder: (context) => buildEditor(
+                                              context, collections, e, theme,
+                                              onDone: onDone),
+                                        ))),
                         CLQuickMenuItem('Delete', Icons.delete,
                             onTap: () => debugPrint("delete")),
                       ],
@@ -167,13 +175,15 @@ class CollectionGrid extends ConsumerWidget {
  */
 
 buildEditor(BuildContext context, Collections collections,
-    Collection collection, KeepItTheme theme) {
+    Collection collection, KeepItTheme theme,
+    {required Function() onDone}) {
   return Dialog(
     backgroundColor: theme.colorTheme.backgroundColor,
     insetPadding: const EdgeInsets.all(8.0),
     child: UpsertCollectionForm(
       collections: collections,
       collection: collection,
+      onDone: onDone,
     ),
   );
 }

@@ -10,13 +10,11 @@ import '../../../models/collections.dart';
 import '../../../models/theme.dart';
 
 class UpsertCollectionForm extends ConsumerWidget {
-  const UpsertCollectionForm({
-    super.key,
-    required this.collections,
-    this.collection,
-  });
+  const UpsertCollectionForm(
+      {super.key, required this.collections, this.collection, this.onDone});
   final Collections collections;
   final Collection? collection;
+  final Function()? onDone;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -39,7 +37,10 @@ class UpsertCollectionForm extends ConsumerWidget {
     return CLTextFieldForm(
       buttonLabel: (collection?.id == null) ? "Create" : "Update",
       clFormFields: clFormFields,
-      onCancel: () => Navigator.of(context).pop(), // Close the dialog},
+      onCancel: () {
+        Navigator.of(context).pop();
+        onDone?.call();
+      }, // Close the dialog},
       onSubmit: (List<String> values) {
         final label = values[0];
         final description = values[1].trim().isEmpty ? null : values[1].trim();
@@ -54,6 +55,7 @@ class UpsertCollectionForm extends ConsumerWidget {
           return e.toString();
         }
         Navigator.of(context).pop(); // Close the dialog
+        onDone?.call();
         return null;
       },
       foregroundColor: theme.colorTheme.textColor,
