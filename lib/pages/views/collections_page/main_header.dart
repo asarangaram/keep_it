@@ -48,6 +48,10 @@ class MainHeader extends ConsumerWidget {
                   ),
                 );
               },
+              child: CLIcon.small(
+                Icons.more_vert,
+                color: theme.colorTheme.textColor,
+              ),
             ),
           )
         ],

@@ -83,6 +83,8 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                                               collectionsPage: widget
                                                   .collections
                                                   .page(pageNum),
+                                              quickMenuScopeKey:
+                                                  quickMenuScopeKey,
                                             ),
                                           );
                                         },
@@ -111,8 +113,10 @@ class CollectionGrid extends ConsumerWidget {
   const CollectionGrid({
     super.key,
     required this.collectionsPage,
+    required this.quickMenuScopeKey,
   });
   final List<Collection> collectionsPage;
+  final GlobalKey<State<StatefulWidget>> quickMenuScopeKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -127,21 +131,23 @@ class CollectionGrid extends ConsumerWidget {
       childAspectRatio: Constants.aspectRatio,
       physics: const NeverScrollableScrollPhysics(),
       children: collectionsPage
-          .map((Collection e) => GestureDetector(
-                onLongPress: collectionsAsync.whenOrNull(
-                    data: (collections) => () => showDialog<void>(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return Dialog(
-                              backgroundColor: theme.colorTheme.backgroundColor,
-                              insetPadding: const EdgeInsets.all(8.0),
-                              child: UpsertCollectionForm(
-                                collections: collections,
-                                collection: e,
-                              ),
-                            );
-                          },
-                        )),
+          .map((Collection e) => CLQuickMenuAnchor(
+                parentKey: quickMenuScopeKey,
+                menuBuilder: (context, boxconstraints) {
+                  return AppTheme(
+                    child: CLQuickMenuGrid.tiny(
+                      menuItems: [
+                        CLQuickMenuItem('Edit', Icons.edit,
+                            onTap: () => debugPrint("edit")),
+                        CLQuickMenuItem('Delete', Icons.delete,
+                            onTap: () => debugPrint("delete")),
+                      ],
+                      foregroundColor: theme.colorTheme.textColor,
+                      backgroundColor: theme.colorTheme.overlayBackgroundColor,
+                      disabledColor: theme.colorTheme.disabledColor,
+                    ),
+                  );
+                },
                 child: CLRoundIconLabeled(
                   label: e.label,
                 ),
@@ -149,6 +155,27 @@ class CollectionGrid extends ConsumerWidget {
           .toList(),
     );
   }
+}
+/***
+ * 
+ onLongPress: collectionsAsync.whenOrNull(
+                    data: (Collections collections) => () => showDialog<void>(
+                          context: context,
+                          builder: (context) =>
+                              buildEditor(context, collections, e, theme),
+                        )),
+ */
+
+buildEditor(BuildContext context, Collections collections,
+    Collection collection, KeepItTheme theme) {
+  return Dialog(
+    backgroundColor: theme.colorTheme.backgroundColor,
+    insetPadding: const EdgeInsets.all(8.0),
+    child: UpsertCollectionForm(
+      collections: collections,
+      collection: collection,
+    ),
+  );
 }
 
 class CLRoundIconLabeled extends StatelessWidget {
