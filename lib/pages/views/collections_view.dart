@@ -131,7 +131,7 @@ class CollectionGrid extends ConsumerWidget {
       childAspectRatio: Constants.aspectRatio,
       physics: const NeverScrollableScrollPhysics(),
       children: collectionsPage
-          .map((Collection e) => CLQuickMenuAnchor(
+          .map((Collection e) => CLQuickMenuAnchor.longPress(
                 parentKey: quickMenuScopeKey,
                 menuBuilder: (context, boxconstraints) {
                   return AppTheme(
