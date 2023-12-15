@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../db/db.dart';
-import '../../models/theme.dart';
+import '../../providers/theme.dart';
 import '../../providers/db_manager.dart';
 
 class SharedItemsView extends ConsumerWidget {

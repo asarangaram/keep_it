@@ -2,7 +2,7 @@ import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../models/theme.dart';
+import '../../../providers/theme.dart';
 import '../../../providers/db_store.dart';
 import 'add_collection_form.dart';
 

@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../constants.dart';
@@ -11,6 +10,7 @@ import '../../models/collection.dart';
 import '../../models/collections.dart';
 
 import '../../models/theme.dart';
+import '../../providers/theme.dart';
 import '../../providers/db_store.dart';
 import 'app_theme.dart';
 import 'collections_page/add_collection.dart';
@@ -33,9 +33,6 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
   @override
   Widget build(BuildContext context) {
     final theme = ref.watch(themeProvider);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.blue,
-    ));
 
     return CLFullscreenBox(
       isSafeArea: true,

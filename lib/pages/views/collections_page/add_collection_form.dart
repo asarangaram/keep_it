@@ -7,7 +7,7 @@ import 'package:keep_it/models/collection.dart';
 import 'package:keep_it/providers/db_store.dart';
 
 import '../../../models/collections.dart';
-import '../../../models/theme.dart';
+import '../../../providers/theme.dart';
 
 class UpsertCollectionForm extends ConsumerWidget {
   const UpsertCollectionForm(
