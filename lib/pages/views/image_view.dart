@@ -3,6 +3,9 @@ import 'package:app_loader/app_loader.dart';
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../providers/theme.dart';
 
 final List<String> imagePaths = [
   'assets/image1.jpg',
@@ -11,7 +14,7 @@ final List<String> imagePaths = [
   'assets/image4.jpg',
 ];
 
-class ImageView extends StatelessWidget {
+class ImageView extends ConsumerWidget {
   const ImageView({super.key, required this.image});
   final ui.Image image;
 
@@ -35,8 +38,10 @@ class ImageView extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final theme = ref.watch(themeProvider);
     return CLFullscreenBox(
+      backgroundColor: theme.colorTheme.backgroundColor,
       child: FutureBuilder<ui.Image>(
         future: getImageGrid(),
         builder: (context, snapshot) {

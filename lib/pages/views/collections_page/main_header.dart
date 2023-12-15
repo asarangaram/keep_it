@@ -33,10 +33,12 @@ class MainHeader extends ConsumerWidget {
             padding: const EdgeInsets.only(right: 8),
             child: CLQuickMenuAnchor(
               parentKey: quickMenuScopeKey,
+              color: theme.colorTheme.textColor,
+              disabledColor: theme.colorTheme.disabledColor,
               menuBuilder: (context, boxconstraints,
                   {required Function() onDone}) {
                 return AppTheme(
-                  child: CLQuickMenuGrid.tiny(
+                  child: CLQuickMenuGrid(
                     menuItems: [
                       CLQuickMenuItem(
                         'Paste',

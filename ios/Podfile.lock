@@ -3,11 +3,11 @@ PODS:
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
-  - share_handler_ios (0.0.11):
+  - share_handler_ios (0.0.12):
     - Flutter
-    - share_handler_ios/share_handler_ios_models (= 0.0.11)
+    - share_handler_ios/share_handler_ios_models (= 0.0.12)
     - share_handler_ios_models
-  - share_handler_ios/share_handler_ios_models (0.0.11):
+  - share_handler_ios/share_handler_ios_models (0.0.12):
     - Flutter
     - share_handler_ios_models
   - share_handler_ios_models (0.0.9)
@@ -43,7 +43,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
-  share_handler_ios: ae3584532280673e02aacdf77f2cdfb2c96b9211
+  share_handler_ios: 83934899a7ad80e435607a0302a7e5b257f8e2f9
   share_handler_ios_models: fc638c9b4330dc7f082586c92aee9dfa0b87b871
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   video_player_avfoundation: e9e6f9cae7d7a6d9b43519b0aab382bca60fcfd1

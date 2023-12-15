@@ -1,4 +1,5 @@
 import 'package:app_loader/app_loader.dart';
+
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -46,7 +47,8 @@ class SharedItemsViewInternal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(themeProvider);
     return CLFullscreenBox(
-      isSafeArea: true,
+      useSafeArea: true,
+      backgroundColor: theme.colorTheme.backgroundColor,
       child: Stack(
         children: [
           Center(
@@ -63,7 +65,7 @@ class SharedItemsViewInternal extends ConsumerWidget {
                 const SizedBox(height: 16),
               ],
               TextButton(
-                  child: CLText.medium(
+                  child: CLText.standard(
                     "Save",
                     color: theme.colorTheme.textColor,
                   ),

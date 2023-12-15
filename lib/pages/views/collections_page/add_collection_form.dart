@@ -1,9 +1,7 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:colan_widgets/colan_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:keep_it/models/collection.dart';
-
 import 'package:keep_it/providers/db_store.dart';
 
 import '../../../models/collections.dart';
@@ -67,7 +65,7 @@ class UpsertCollectionForm extends ConsumerWidget {
 
   String? validateName(String? name) {
     if (name?.isEmpty ?? true) {
-      return "Have a good name";
+      return "Name can't be empty";
     }
     if (name!.length > 16) {
       return "Name should not exceed 15 letters";

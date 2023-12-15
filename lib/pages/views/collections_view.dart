@@ -35,7 +35,7 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
     final theme = ref.watch(themeProvider);
 
     return CLFullscreenBox(
-      isSafeArea: true,
+      useSafeArea: true,
       backgroundColor: theme.colorTheme.backgroundColor,
       child: CLQuickMenuScope(
         key: quickMenuScopeKey,
@@ -52,7 +52,7 @@ class _CollectionsView2State extends ConsumerState<CollectionsView2> {
                         MainHeader(quickMenuScopeKey: quickMenuScopeKey),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: CLText.mediumLabel(
+                          child: CLText.standard(
                             "Your Collections",
                             color: theme.colorTheme.textColor,
                           ),
@@ -128,12 +128,14 @@ class CollectionGrid extends ConsumerWidget {
       childAspectRatio: Constants.aspectRatio,
       physics: const NeverScrollableScrollPhysics(),
       children: collectionsPage
-          .map((Collection e) => CLQuickMenuAnchor.longPress(
+          .map((Collection e) => CLQuickMenuAnchor(
                 parentKey: quickMenuScopeKey,
+                color: theme.colorTheme.textColor,
+                disabledColor: theme.colorTheme.disabledColor,
                 menuBuilder: (context, boxconstraints,
                     {required Function() onDone}) {
                   return AppTheme(
-                    child: CLQuickMenuGrid.tiny(
+                    child: CLQuickMenuGrid(
                       menuItems: [
                         CLQuickMenuItem('Edit', Icons.edit,
                             onTap: collectionsAsync.whenOrNull(

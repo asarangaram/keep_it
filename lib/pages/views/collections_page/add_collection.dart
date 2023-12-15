@@ -23,10 +23,10 @@ class _AddNewCollectionState extends ConsumerState<AddNewCollection> {
   Widget build(BuildContext context) {
     final collectionsAsync = ref.read(collectionsProvider(null));
     final theme = ref.watch(themeProvider);
-    return CLButtonIconLabelled.medium(
+    return CLButtonIconLabelled.standard(
       Icons.add_circle_outline_outlined,
       "New Collection",
-      onPressed: collectionsAsync.whenOrNull(
+      onTap: collectionsAsync.whenOrNull(
           data: (collections) => () => showDialog<void>(
                 context: context,
                 builder: (BuildContext context) {
@@ -37,6 +37,7 @@ class _AddNewCollectionState extends ConsumerState<AddNewCollection> {
                 },
               )),
       color: theme.colorTheme.textColor,
+      disabledColor: theme.colorTheme.disabledColor,
     );
   }
 }
